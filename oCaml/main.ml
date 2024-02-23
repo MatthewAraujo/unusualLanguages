@@ -1,9 +1,7 @@
-(* Função para ler um número do usuário *)
 let read_number () =
   print_string "Digite um número: ";
   read_int ();;
 
-(* Função para encontrar o segundo maior número em uma lista *)
 let rec segundo_maior numeros maior1 maior2 =
   match numeros with
   | [] -> maior2
@@ -15,7 +13,6 @@ let rec segundo_maior numeros maior1 maior2 =
     else
       segundo_maior tail maior1 maior2;;
 
-(* Função principal que recebe números do usuário e imprime a lista *)
 let rec main lista contador =
   if contador = 10 then
     begin
@@ -40,5 +37,4 @@ let rec main lista contador =
     else
       main (novo_numero :: lista) (contador + 1);;
 
-(* Chamada inicial do programa *)
 main [] 0;;
