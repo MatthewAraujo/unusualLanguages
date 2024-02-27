@@ -1,29 +1,28 @@
 -module(main).
-
--export([start/0, ping/2, pong/0]).
-
-ping(0, Pong_PID) ->
-  Pong_PID ! finished,
-  io:format("ping finished~n", []);
-
-ping(N, Pong_PID) ->
-  Pong_PID ! {ping, self()},
-  receive
-      pong ->
-        io:format("Ping received pong~n", [])
-  end,
-  ping(N - 1, Pong_PID).
-
-pong() ->
-  receive
-    finished ->
-      io:format("Pong finished~n", []);
-    {ping, Ping_PID} ->
-      io:format("Pong received ping~n", []),
-      Ping_PID ! pong,
-      pong()
-  end.
+-export([start/0]).
 
 start() ->
-  Pong_PID = spawn(tut15, pong, []),
-  spawn(tut15, ping, [3, Pong_PID]).
+    Array = get_user_input([], 1),
+    SecondLargest = find_second_largest(Array),
+    io:format("O segundo maior elemento é: ~w~n", [SecondLargest]).
+
+get_user_input(Array, N) when N =< 10 ->
+    io:format("Digite o ~Bº elemento: ", [N]),
+    Value = read_number(),
+    case lists:member(Value, Array) of
+        true ->
+            io:format("Valor repetido. Por favor, escolha outro.~n"),
+            get_user_input(Array, N);
+        false ->
+            get_user_input([Value | Array], N + 1)
+    end;
+get_user_input(Array, _) ->
+    Array.
+
+read_number() ->
+    {ok, [Number], _} = io:fread("","~d"),
+    Number.
+
+find_second_largest(Array) ->
+    SortedArray = lists:sort(Array),
+    lists:last(lists:init(SortedArray)).
